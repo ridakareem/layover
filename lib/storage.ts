@@ -13,12 +13,22 @@ export function slugify(text: string) {
     .replace(/^-+|-+$/g, "");
 }
 
+// Random unique id for file names.
+// crypto.randomUUID() only exists on https:// or localhost, so when the site is
+// opened by IP address over http (e.g. http://192.168.x.x:3000) we fall back to
+// crypto.getRandomValues(), which works everywhere.
+export function randomId(): string {
+  if (typeof crypto.randomUUID === "function") return crypto.randomUUID();
+  const bytes = crypto.getRandomValues(new Uint8Array(16));
+  return Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+}
+
 // Uploads a file under the given folder and returns its public URL.
 // A random prefix keeps file names unique.
 export async function uploadFile(file: File, folder: string): Promise<string> {
   const supabase = createClient();
   const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g, "_");
-  const path = `${folder}/${crypto.randomUUID()}-${safeName}`;
+  const path = `${folder}/${randomId()}-${safeName}`;
 
   const { error } = await supabase.storage.from(BUCKET).upload(path, file, {
     contentType: file.type,
