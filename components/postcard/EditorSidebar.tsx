@@ -17,6 +17,8 @@ type Props = {
   onPickFront: (url: string) => void;
   onBackFile: (file: File) => void;
   onRemoveBack: () => void;
+  stamps: string[]; // every file in /public/stamps
+  onAddStamp: (src: string) => void;
   onAddText: () => void;
   onUpdateBlock: (id: string, patch: Partial<TextBlock>) => void;
   onDeleteSelected: () => void;
@@ -108,6 +110,46 @@ export default function EditorSidebar(props: Props) {
               )}
             </div>
             <p className="mt-2 text-xs text-muted">Tap the photo on the card to move or resize it.</p>
+          </section>
+        )}
+
+        {/* ---------- BACK: stamp picker ---------- */}
+        {side === "back" && (
+          <section>
+            <h3 className="mb-2 font-serif text-lg">Stamps</h3>
+            <p className="mb-2 text-xs text-muted">Drag a stamp onto the card, or tap it to add it.</p>
+
+            {props.stamps.length === 0 ? (
+              <p className="text-sm text-muted">
+                No stamps found. Put .svg files in <code>public/stamps</code> and restart <code>npm run dev</code>.
+              </p>
+            ) : (
+              <ul className="grid grid-cols-4 gap-2 md:grid-cols-3">
+                {props.stamps.map((src) => (
+                  <li key={src}>
+                    <button
+                      type="button"
+                      onClick={() => props.onAddStamp(src)} // tap-to-add (works on touch screens)
+                      className="flex aspect-square w-full items-center justify-center rounded-md border border-line bg-paper p-1 hover:border-accent"
+                      aria-label="Add this stamp"
+                    >
+                      {/* draggable: the editor's drop zone reads the file path from dataTransfer */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={src}
+                        alt=""
+                        draggable
+                        onDragStart={(e) => {
+                          e.dataTransfer.setData("application/x-stamp", src);
+                          e.dataTransfer.effectAllowed = "copy";
+                        }}
+                        className="max-h-full max-w-full object-contain"
+                      />
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </section>
         )}
 
