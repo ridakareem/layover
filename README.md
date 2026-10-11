@@ -1,4 +1,4 @@
-# Travel souvenir site
+# Mem-nir
 
 Next.js (App Router) + TypeScript + Tailwind + Supabase + react-konva.
 
@@ -32,3 +32,14 @@ Next.js (App Router) + TypeScript + Tailwind + Supabase + react-konva.
 - The optional back photo's position is saved as an item of kind `"photo"` inside the
   `stamps` JSON; the picture itself is `back_image_url`.
 - `PostcardRenderer` is the single component used by the editor and the viewer.
+
+
+Video links:
+
+DEMO:
+
+https://drive.google.com/file/d/1BIlzEQv0yLvp93xueShXbTGz8fWg_iY8/view?usp=sharing
+
+NFC TAG SCANNING:
+
+https://drive.google.com/file/d/1qSrA5ElVcb1zvKEdv3cXVCEQpGxwsrih/view?usp=sharing  
